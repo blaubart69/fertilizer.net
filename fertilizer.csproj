@@ -3,16 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <!--<ImplicitUsings>enable</ImplicitUsings>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />-->
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Iot.Device.Bindings" Version="2.1.0" />
+    <PackageReference Include="System.Device.Gpio" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

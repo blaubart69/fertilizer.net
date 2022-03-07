@@ -1,26 +1,10 @@
-using System.Text;
-using System.Security.AccessControl;
-using System.ComponentModel;
-using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace Fertilizer
 {
-    class Duenger
-    {
-        [JsonPropertyName("name")]
-        public string? Name {get; set; }
-        [JsonPropertyName("kg")]
-        public float? Kg {get; set; }
-
-        public override string ToString()
-        {
-            return $"Name: {Name} Kg: {Kg}";
-        }
-    }
-
     class DuengerValues
     {
         public Duenger[]? duengervalues { get; set; }

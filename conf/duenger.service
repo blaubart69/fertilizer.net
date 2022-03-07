@@ -1,0 +1,15 @@
+[Unit]
+Description=The Duenger server
+After=multi-user.target
+
+[Service]
+User=pi
+Group=pi
+Type=idle
+WorkingDirectory=/home/pi/dev/fertilizer
+ExecStart=/usr/bin/python3 -u /home/pi/dev/fertilizer/webservice.py
+#StandardOutput=journal
+#StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

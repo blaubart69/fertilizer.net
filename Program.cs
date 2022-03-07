@@ -25,6 +25,10 @@ namespace Fertilizer
     {
         public Duenger[]? duengervalues { get; set; }
     }
+    class KindOfDuenger
+    {
+        public string? fertilizername { get; set;}
+    }
 
     class Program
     {
@@ -48,19 +52,6 @@ namespace Fertilizer
                 log.LogInformation($"/settings(GET): {settingsFromFile}");
                 return settingsFromFile;
             });
-            /*
-            app.MapPost("/settings", async (HttpContext context, ILogger<Program> log) =>
-            {
-                string body;
-                using (StreamReader reader = new StreamReader(context.Request.Body, Encoding.UTF8))
-                {
-                    body = await reader.ReadToEndAsync();
-                }
-                log.LogInformation($"/settings(POST): body: {body}");
-
-                return Results.Ok();
-            });
-            */
             app.MapPost("/settings", (DuengerValues newValues, ILogger<Program> log) =>
             {
                 log.LogInformation($"/settings(POST): new duenger values:");
@@ -70,6 +61,12 @@ namespace Fertilizer
                 }
                 return Results.Ok();
             });
+            app.MapPost("/applyChanges", (KindOfDuenger kind, ILogger<Program> log) => 
+            {
+                log.LogInformation($"/applyChanges: set fertilizer to [{kind.fertilizername}]");
+                return Results.Ok();
+            });
+
 
             app.Run();
         }

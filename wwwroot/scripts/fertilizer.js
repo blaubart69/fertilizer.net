@@ -25,7 +25,19 @@ angular.module('fertilizer')
             $http.get('/calculate').then(handleResponse);
         };
         this.applyChanges = function () {
-            $http.post('/applyChanges', $scope.fertilizer).then(handleResponse);
+            //newFertilizer = { fertilizername : $scope.fertilizer};
+            /*$http.post(
+              '/applyChanges', 
+              newFertilizer, 
+              {headers:{'Content-Type': 'multipart/form-data'}} ).then(handleResponse);
+                */
+              $http({
+                method: "post",
+                url: '/applyChanges',
+                headers: { "Content-Type": "application/json; charset=utf-8" },
+                data: { fertilizername : $scope.fertilizer}
+              }).then(handleResponse);
+
         };
         this.loadSettings = function () {
           $http.get('/settings').then(function (response) {
@@ -39,7 +51,8 @@ angular.module('fertilizer')
         this.startCalculation = function() {
             if (angular.isDefined(stop)) return;
   
-            stop = $interval(this.calculate, 2500);
+            //stop = $interval(this.calculate, 2500);
+            stop = "bumsti"
         };
         this.stopCalculation = function() {
             if (angular.isDefined(stop)) {
@@ -109,11 +122,12 @@ angular.module('fertilizer')
         });
       };
       this.saveSettings = function () {
-        newSettings = { duengervalues : $scope.settings }
-        //$http.post('/settings', $scope.settings).then(function (response) {
-        $http.post('/settings', newSettings).then(function (response) {
-          console.log(response);
-        });
+        $http({
+          method: "post",
+          url: '/settings',
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          data: { duengervalues : $scope.settings }
+        }).then(handleResponse);
       }
       this.loadSettings();
       console.log("initialize settings controller (.NET)");

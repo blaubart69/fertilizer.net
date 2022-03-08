@@ -12,6 +12,8 @@ class GpioSignalReceiver : ISignalReceiver
     public GpioSignalReceiver()
     {
         _gpio = new GpioController();
+        _gpio.OpenPin(WHEEL_PIN, PinMode.Input);
+        _gpio.OpenPin(ROLLER_PIN, PinMode.Input);
         _gpio.RegisterCallbackForPinValueChangedEvent(WHEEL_PIN,  PinEventTypes.Falling, pinChanged);
         _gpio.RegisterCallbackForPinValueChangedEvent(ROLLER_PIN, PinEventTypes.Falling, pinChanged);
     }

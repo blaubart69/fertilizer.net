@@ -44,6 +44,7 @@ class SignalProcessor
     public float KilosPerHektar { get { return _current_kilos_per_hektar; } }
     public float OverallMeters  { get { return _overallMeters; } }
     public float OverallKilos   { get { return _overallKilos; } }
+    public string CurrentName   { get { return _currentName; } }
     public void SetDuenger(string name, int signals, float kg)
     {
         _currentSignalsPerKilo = (float)signals / kg;

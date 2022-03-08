@@ -23,7 +23,6 @@ namespace Fertilizer
 
         static void Main(string[] args)
         {
-            // create a logger factory
             var loggerFactory = LoggerFactory.Create(
                 builder => builder
                             .AddConsole()
@@ -73,6 +72,15 @@ namespace Fertilizer
                 string settingsFromFile = File.ReadAllText(DUENGER_CONFIG_FILENAME);
                 log.LogInformation($"/settings(GET): {settingsFromFile}");
                 return settingsFromFile;
+            });
+
+            app.MapGet("/calculate", (ILogger<Program> log) =>
+            {
+                 return new { 
+                     calculated = signalProcessor.KilosPerHektar, 
+                     distance   = signalProcessor.OverallMeters, 
+                     amount     = signalProcessor.OverallKilos, 
+                     fertilizer = signalProcessor.CurrentName };
             });
 
             app.MapPost("/settings", (DuengerValues newValues, ILogger<Program> log) =>

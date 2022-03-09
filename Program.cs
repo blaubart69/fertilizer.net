@@ -42,7 +42,11 @@ namespace Fertilizer
         {
             var loggerFactory = LoggerFactory.Create(
                 builder => builder
-                            .AddConsole()
+                            .AddSimpleConsole( options => {
+                                options.SingleLine = true;
+                                options.IncludeScopes = false;
+                                options.TimestampFormat = "hh:mm:ss ";
+                            })
                             .AddDebug()
                             .SetMinimumLevel(LogLevel.Debug)
             );

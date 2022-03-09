@@ -4,9 +4,9 @@
         <div class="col-xs-12">
             <div class="col-xs-12">
                 <h2 class="display-2">
-                    <span class="text-uppercase">{{response.fertilizer}}</span>
+                    <span class="text-uppercase">{{response.fertilizername}}</span>
                     <small>&nbsp;(kg/ha)</small>
-                    <span class="pull-right">&nbsp;{{response.calculated | number:1}}</span>
+                    <span class="pull-right">&nbsp;{{response.kilosperhektar | number:1}}</span>
                 </h2>
             </div>
         </div>
@@ -15,13 +15,13 @@
             <div class="col-xs-12">
                 <h3 class="display-3">
                     <small>Aktuelles Feld (kg)</small>
-                    <span class="pull-right">&nbsp;{{response.amount | number:1}}</span>
+                    <span class="pull-right">&nbsp;{{response.overallkilos | number:1}}</span>
                 </h3>
             </div>
             <div class="col-xs-12">
                 <h3 class="display-3">
                     <small>Strecke (m)</small>
-                    <span class="pull-right">&nbsp;{{response.distance | number:1}}</span>
+                    <span class="pull-right">&nbsp;{{response.overallmeters | number:1}}</span>
                 </h3>
             </div>
         </div>

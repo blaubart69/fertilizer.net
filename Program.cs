@@ -77,10 +77,10 @@ namespace Fertilizer
             app.MapGet("/calculate", (ILogger<Program> log) =>
             {
                  var data = new { 
-                     calculated = signalProcessor.KilosPerHektar, 
-                     distance   = signalProcessor.OverallMeters, 
-                     amount     = signalProcessor.OverallKilos, 
-                     fertilizer = signalProcessor.CurrentName };
+                     kilosperhektar = signalProcessor.KilosPerHektar, 
+                     overallmeters  = signalProcessor.OverallMeters, 
+                     overallkilos   = signalProcessor.OverallKilos, 
+                     fertilizername = signalProcessor.CurrentName };
                 log.LogInformation($"/calculate(GET): {data.ToString()}");
                 return data;
             });

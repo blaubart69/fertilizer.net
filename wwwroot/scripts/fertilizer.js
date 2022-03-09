@@ -7,12 +7,12 @@ angular.module('fertilizer')
         $scope.fertilizer = 'Kali';
         $scope.fertilizers = [];
         $scope.response = {
-            fertilizer: 'Kali',
-            distance: 0,
+            fertilizername: 'Kali',
+            overallmeters: 0,
             distancePerDay: 0,
-            amount: 0,
+            overallkilos: 0,
             amountPerDay: 0,
-            calculated: 0
+            kilosperhektar: 0
         };
 
         const handleResponse = function (response) {

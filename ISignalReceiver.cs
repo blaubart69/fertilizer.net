@@ -4,5 +4,6 @@ namespace Fertilizer;
 
 interface ISignalReceiver
 {
-    void RegisterSignal(Action<KIND_OF_SIGNAL> signal);
+    public abstract void RegisterSignal(Action<KIND_OF_SIGNAL> signal);
+    
 }

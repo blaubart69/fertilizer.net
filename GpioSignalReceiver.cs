@@ -1,5 +1,6 @@
 using System;
 using System.Device.Gpio;
+using System.Threading.Tasks;
 
 namespace Fertilizer;
 
@@ -17,7 +18,6 @@ class GpioSignalReceiver : ISignalReceiver
         _gpio.RegisterCallbackForPinValueChangedEvent(WHEEL_PIN,  PinEventTypes.Falling, pinChanged);
         _gpio.RegisterCallbackForPinValueChangedEvent(ROLLER_PIN, PinEventTypes.Falling, pinChanged);
     }
-
     public void RegisterSignal(Action<KIND_OF_SIGNAL> signal)
     {
         _onSignal = signal;

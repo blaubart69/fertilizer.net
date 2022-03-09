@@ -51,8 +51,7 @@ angular.module('fertilizer')
         this.startCalculation = function() {
             if (angular.isDefined(stop)) return;
   
-            //stop = $interval(this.calculate, 2500);
-            stop = "bumsti"
+            stop = $interval(this.calculate, 2500);
         };
         this.stopCalculation = function() {
             if (angular.isDefined(stop)) {

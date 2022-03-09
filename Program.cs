@@ -21,6 +21,23 @@ namespace Fertilizer
     {
         static readonly string DUENGER_CONFIG_FILENAME = "./conf/duenger.json";
 
+        static ISignalReceiver CreateSignalReceiver(ILogger log)
+        {
+            ISignalReceiver signalReceiver;
+            try
+            {
+                signalReceiver = new GpioSignalReceiver();
+            }
+            catch (Exception ex)
+            {
+                log.LogCritical(ex.Message);
+                log.LogWarning("leider kein GPIO heute. Settings up FakeSignalGenerator");
+                signalReceiver = new DemoSignalReceiver();
+            }
+
+            return signalReceiver;
+        }
+
         static void Main(string[] args)
         {
             var loggerFactory = LoggerFactory.Create(
@@ -31,27 +48,10 @@ namespace Fertilizer
             );
             var log = loggerFactory.CreateLogger<SignalProcessor>();
 
-            ISignalReceiver signalReceiver;
-            try
-            {
-                signalReceiver = new GpioSignalReceiver();
-            }
-            catch (Exception ex)
-            {
-                log.LogCritical(ex.Message);
-                log.LogInformation("leider kein GPIO heute");
-                signalReceiver = new DemoSignalReceiver();
-            }
-
-            var signalProcessor = new SignalProcessor( signalReceiver, TimeSpan.FromSeconds(20), log);
-            Task signalTask = Task.Factory.StartNew( async () => 
-            {
-                while (true)
-                {
-                    signalProcessor.Refresh();
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                }
-            });
+            var signalReceiver = CreateSignalReceiver(log);
+            var signalProcessor = new SignalProcessor( signalReceiver, TimeSpan.FromSeconds(3), log);
+            signalProcessor.SetDuenger("Kali", 30, 6.1f);
+            Task refreshingTask = signalProcessor.StartRefresh();
 
             var builder = WebApplication.CreateBuilder(args);
             builder.Logging.ClearProviders();
@@ -76,11 +76,13 @@ namespace Fertilizer
 
             app.MapGet("/calculate", (ILogger<Program> log) =>
             {
-                 return new { 
+                 var data = new { 
                      calculated = signalProcessor.KilosPerHektar, 
                      distance   = signalProcessor.OverallMeters, 
                      amount     = signalProcessor.OverallKilos, 
                      fertilizer = signalProcessor.CurrentName };
+                log.LogInformation($"/calculate(GET): {data.ToString()}");
+                return data;
             });
 
             app.MapPost("/settings", (DuengerValues newValues, ILogger<Program> log) =>

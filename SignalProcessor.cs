@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Fertilizer;
@@ -15,7 +16,7 @@ class SignalProcessor
     //
     // 10000 m² divediert durch 15m Breite des Düngerers
     //
-    const float METERS_PER_HEKTAR = 10000f / 15.0f;
+    const float METERS_PER_HEKTAR = 10000f / 15f;
     //
     // 417 Signale für 50 Meter
     //
@@ -24,7 +25,7 @@ class SignalProcessor
     const float SIGNALS_PER_METER = (float)wheel_signals / (float)wheel_meter;
 
     float   _currentSignalsPerKilo = 0;
-    string  _currentName = String.Empty;
+    string  _currentName = "n/a";
     float   _currentKg = 0;
     readonly TimeSpan _timewindowForCalculations;
     DateTime? _lastRefresh = null;
@@ -55,8 +56,7 @@ class SignalProcessor
     {
         uint signalsWheel  = _bufWheel .GetSignalsWithinTimespan(now, _timewindowForCalculations);
         uint signalsRoller = _bufRoller.GetSignalsWithinTimespan(now, _timewindowForCalculations);
-        _log.LogInformation("signals wheel/roller: {0:N4} {1:N4}", signalsWheel, signalsRoller);
-
+        
         float meters_in_timespan = (float)signalsWheel  / SIGNALS_PER_METER;
         float kilos_in_timespan  = (float)signalsRoller / _currentSignalsPerKilo;
 
@@ -70,6 +70,8 @@ class SignalProcessor
         {
             kilos_per_ha = 0;
         }
+
+        _log.LogInformation("signals wheel/roller: {0,4} {1,4} kilos_per_ha: {2,10}", signalsWheel, signalsRoller, kilos_per_ha);
 
         return kilos_per_ha;
     }
@@ -88,13 +90,25 @@ class SignalProcessor
 
         _lastRefresh = now;
     }
-    public void Refresh()
+    void Refresh()
     {
         DateTime now = DateTime.Now;
 
         _current_kilos_per_hektar = CalculateCurrentKiloPerHektar(now);
         AddToOverall(now);
         
+    }
+    public Task StartRefresh()
+    {
+        return
+            Task.Factory.StartNew( async () => 
+                {
+                    while (true)
+                    {
+                        this.Refresh();
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+                });
     }
     void SignalArrived(KIND_OF_SIGNAL signal)
     {
